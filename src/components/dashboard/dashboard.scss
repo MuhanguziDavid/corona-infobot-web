@@ -1,0 +1,23 @@
+.dashboard-container{
+  margin-top: 10%;
+
+  &__card2 {
+    padding: 40px;
+    text-align: center;
+    box-sizing: border-box;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, .5);
+    border-radius: 10px;
+    font-family: averta,avenir w02,avenir,Helvetica,Arial,sans-serif;
+
+    &__table {
+      max-height: 400px;
+      overflow: scroll;
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .dashboard-container{
+    margin-top: 20%;
+  }
+}
