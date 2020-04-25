@@ -43,8 +43,8 @@ export class Login extends Component {
     // eslint-disable-next-line no-unused-expressions
     response && response.data && (
       toast.dismiss(),
-      localStorage.setItem('token', response.data.access),
-      localStorage.setItem('username', response.data.name),
+      localStorage.setItem('token', response.data.user.token),
+      localStorage.setItem('username', response.data.user.firstname),
       toast.success('Login successful', { autoClose: 3500, hideProgressBar: false }),
       this.toggleState('isLoading', this.state.isLoading),
       history.push('/dashboard')

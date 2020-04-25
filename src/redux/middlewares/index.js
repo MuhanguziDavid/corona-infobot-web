@@ -36,8 +36,9 @@ const privatePostData = (path, actionCreator, method, data,) => (dispatch) => {
     };
   }).catch((error) => {
     dispatch(errorOccured(error));
+    console.log('error', error)
     return {
-      error: error.response.data
+      error: error
     };
   });
 };
