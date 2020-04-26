@@ -4,9 +4,9 @@ import { bindActionCreators } from 'redux';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PropTypes from 'prop-types';
-import { privatePostData, publicDataFetch } from '../../redux/middlewares';
+import { privateDataFetch, privatePostData } from '../../redux/middlewares';
 import DashboardComponent from '../../components/dashboard';
-import { fetchTreesAction } from '../../redux/actions/trees';
+import { fetchTreesAction, openTreeAction } from '../../redux/actions/trees';
 
 
 export class Dashboard extends Component {
@@ -30,8 +30,8 @@ export class Dashboard extends Component {
 
   getTrees = async () => {
     this.toggleState('isLoading', this.state.isLoading);
-    const { publicDataFetch } = this.props;
-    await publicDataFetch('/getAllTrees/', fetchTreesAction);
+    const { privateDataFetch } = this.props;
+    await privateDataFetch('/getAllTrees/', fetchTreesAction);
     this.toggleState('isLoading', this.state.isLoading);
   }
 
@@ -39,6 +39,31 @@ export class Dashboard extends Component {
     const { name, value } = event.target;
     this.setState({ [name]: value });
   }
+
+  handleClick = async (id, type) => {
+    this.toggleState('isLoading', this.state.isLoading);
+    let response;
+    const { history, privatePostData } = this.props;
+    const data = { id, type };
+    if (type === 'tree') {
+      response = await privatePostData('/getTreeAndIntents/', openTreeAction, 'post', data);
+    } else {
+      response = await privatePostData('/getIntentAndPayload/', openTreeAction, 'post', data);
+    }
+    // eslint-disable-next-line no-unused-expressions
+    response && response.error && (
+      toast.dismiss(),
+      toast.error(`${response.error.message}`, { autoClose: 3500, hideProgressBar: false }),
+      this.toggleState('isLoading', this.state.isLoading)
+    );
+    // eslint-disable-next-line no-unused-expressions
+    response && response.data && (
+      toast.dismiss(),
+      toast.success('Login successful', { autoClose: 3500, hideProgressBar: false }),
+      this.toggleState('isLoading', this.state.isLoading)
+      // history.push('/dashboard')
+    )
+  };
 
   handleSubmit = async (event) => {
     // event.preventDefault();
@@ -60,19 +85,19 @@ export class Dashboard extends Component {
   render() {
     const { isLoading } = this.state;
     const { retrievedTrees } = this.props;
-    console.log('>>>', retrievedTrees.data);
     return (
       <DashboardComponent
         handleChange={this.handleChange}
         handleSubmit={this.handleSubmit}
-        retrievedTrees={retrievedTrees.data}
+        handleClick={this.handleClick}
+        retrievedTrees={retrievedTrees}
         isLoading={isLoading}
       />
     );
   };
 };
 
-const matchDispatchToProps = (dispatch) => bindActionCreators({fetchTreesAction, publicDataFetch}, dispatch);
+const matchDispatchToProps = (dispatch) => bindActionCreators({fetchTreesAction, privateDataFetch, openTreeAction, privatePostData}, dispatch);
 
 const mapStateToProps = state => {
   return {
@@ -82,8 +107,10 @@ const mapStateToProps = state => {
 
 Dashboard.propTypes = {
   retrievedTrees: PropTypes.object,
-  publicDataFetch: PropTypes.func,
+  privateDataFetch: PropTypes.func,
+  privatePostData: PropTypes.func,
   fetchTreesAction: PropTypes.func,
+  openTreeAction: PropTypes.func,
   // privatePostData: PropTypes.func.isRequired,
 };
 

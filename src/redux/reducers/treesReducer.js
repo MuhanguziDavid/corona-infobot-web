@@ -2,6 +2,7 @@ import * as types from '../actions/types'
 
 const initialState = {
   retrievedTrees: {},
+  currentTree: {},
   error: false,
 };
 
@@ -11,6 +12,12 @@ const treesReducer = (state = initialState, action) => {
       return {
         ...state,
         retrievedTrees: action.payload,
+      };
+    case types.OPEN_TREE:
+      return {
+        ...state,
+        retrievedTrees: action.payload,
+        currentTree: action.payload,
       };
     case types.ERROR_OCCURRED:
       return {

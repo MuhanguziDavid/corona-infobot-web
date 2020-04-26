@@ -22,9 +22,10 @@ const LoginComponent = ({handleChange, isLoading, handleSubmit}) => {
             </Button>
           }
           {
-            isLoading && <div className="authentication-container__spinner">
+            isLoading &&
+            <div className="authentication-container__spinner">
               <Spinner animation="grow" />
-            </div> 
+            </div>
           }
           <p className="authentication-container__link">Don't have an account?<a href="/signup">Sign Up</a></p>
         </Form>
