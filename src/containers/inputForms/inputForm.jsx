@@ -9,7 +9,7 @@ import DashboardComponent from '../../components/dashboard';
 import { fetchTreesAction, openTreeAction } from '../../redux/actions/trees';
 
 
-export class Dashboard extends Component {
+export class InputForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -47,12 +47,8 @@ export class Dashboard extends Component {
     const data = { id, type };
     if (type === 'tree') {
       response = await privatePostData('/getTreeAndIntents/', openTreeAction, 'post', data);
-    }
-    if (type === 'intent') {
+    } else {
       response = await privatePostData('/getIntentAndPayload/', openTreeAction, 'post', data);
-    }
-    if (type === 'answer') {
-      response = await privatePostData('/getAnswer/', openTreeAction, 'post', data);
     }
     // eslint-disable-next-line no-unused-expressions
     response && response.error && (
@@ -94,8 +90,7 @@ export class Dashboard extends Component {
         handleChange={this.handleChange}
         handleSubmit={this.handleSubmit}
         handleClick={this.handleClick}
-        getTrees={this.getTrees}
-        retrievedTrees={retrievedTrees.data}
+        retrievedTrees={retrievedTrees}
         isLoading={isLoading}
       />
     );
@@ -110,7 +105,7 @@ const mapStateToProps = state => {
   };
 };
 
-Dashboard.propTypes = {
+InputForm.propTypes = {
   retrievedTrees: PropTypes.object,
   privateDataFetch: PropTypes.func,
   privatePostData: PropTypes.func,
@@ -119,12 +114,12 @@ Dashboard.propTypes = {
   // privatePostData: PropTypes.func.isRequired,
 };
 
-Dashboard.defaultProps = {
+InputForm.defaultProps = {
   retrievedTrees: {},
 };
 
 export default connect(
   mapStateToProps,
   matchDispatchToProps,
-)(Dashboard);
+)(InputForm);
 

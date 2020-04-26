@@ -4,7 +4,7 @@ import TreesCard from './treesCard';
 import './dashboard.scss';
 
 const Dashboard = props => {
-  const {handleChange, handleSubmit, handleClick, retrievedTrees, isLoading } = props;
+  const {handleChange, handleSubmit, handleClick, getTrees, retrievedTrees, isLoading } = props;
 
   return (
     <Container>
@@ -14,6 +14,7 @@ const Dashboard = props => {
             handleChange={handleChange}
             handleSubmit={handleSubmit}
             handleClick={handleClick}
+            getTrees={getTrees}
             retrievedTrees={retrievedTrees}
             isLoading={isLoading}
           />
