@@ -6,17 +6,17 @@ const TreesTable = props => {
   return (
     <div className="dashboard-container__card2__table">
       <Table striped bordered hover size="sm">
-        {retrievedTrees.data[0] && retrievedTrees.data[0].type === "tree" ? (
+        {retrievedTrees.type === "treeList" ? (
           // display trees list (all trees)
           <React.Fragment>
             <thead>
               <tr>
                 <th>id</th>
-                <th>list of trees</th>
+                <th>tree</th>
               </tr>
             </thead>
             <tbody>
-              {retrievedTrees.data.map((tree, index) => (
+              {retrievedTrees.payloadData.map((tree, index) => (
                 <React.Fragment key={index}>
                   <tr onClick={() => handleClick(tree.id, tree.type)}>
                     <td>{tree.id}</td>
@@ -27,7 +27,7 @@ const TreesTable = props => {
             </tbody>
           </React.Fragment>
         ) : (
-          retrievedTrees.data.type === 'tree' ? (
+          retrievedTrees.type === 'tree' ? (
             // dispaly trees
             <React.Fragment>
               <thead>
@@ -39,7 +39,7 @@ const TreesTable = props => {
                 </tr>
               </thead>
               <tbody>
-                {retrievedTrees.data.payloadData.map((tree, index) => (
+                {retrievedTrees.payloadData.map((tree, index) => (
                   <React.Fragment key={index}>
                     <tr onClick={() => handleClick(tree.id, tree.type)}>
                       <td>{tree.number ? tree.number : 'N/A'}</td>
@@ -52,27 +52,43 @@ const TreesTable = props => {
               </tbody>
             </React.Fragment>
           ) : (
-            // dispaly intents
-            <React.Fragment>
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>type</th>
-                  <th>title</th>
-                </tr>
-              </thead>
-              <tbody>
-                {retrievedTrees.data.payloadData.map((tree, index) => (
-                  <React.Fragment key={index}>
-                    <tr onClick={() => handleClick(tree.id, tree.type)}>
-                      <td>{tree.number ? tree.number : 'N/A'}</td>
-                      <td>{tree.type}</td>
-                      <td>{tree.title}</td>
-                    </tr>
-                  </React.Fragment>
-                ))}
-              </tbody>
-            </React.Fragment>
+            retrievedTrees.type === 'intent' ? (
+              // dispaly intents
+              <React.Fragment>
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>type</th>
+                    <th>title</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {retrievedTrees.payloadData.map((tree, index) => (
+                    <React.Fragment key={index}>
+                      <tr onClick={() => handleClick(tree.id, tree.type)}>
+                        <td>{tree.number ? tree.number : 'N/A'}</td>
+                        <td>{tree.type}</td>
+                        <td>{tree.title}</td>
+                      </tr>
+                    </React.Fragment>
+                  ))}
+                </tbody>
+              </React.Fragment>
+            ) : (
+              // dispaly answers
+              <React.Fragment>
+                <thead>
+                  <tr>
+                    <th>body</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{retrievedTrees.body}</td>
+                  </tr>
+                </tbody>
+              </React.Fragment>
+            )
           )
         )}
       </Table>
