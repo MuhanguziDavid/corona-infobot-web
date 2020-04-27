@@ -24,7 +24,7 @@ const publicPostData = (path, actionCreator, method, data) => (dispatch) => {
     });
 };
 
-const privatePostData = (path, actionCreator, method, data,) => (dispatch) => {
+const privatePostData = (path, actionCreator, method, data) => (dispatch) => {
   const token = localStorage.getItem('token');
 
   axiosInstance.defaults.headers.common.Authorization = 'Bearer '.concat(token);
