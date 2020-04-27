@@ -2,7 +2,7 @@ import React from 'react';
 import { Table } from 'react-bootstrap';
 
 const TreesTable = props => {
-  const {retrievedTrees, handleSubmit, handleClick} = props;
+  const {retrievedTrees, handleClick} = props;
   return (
     <div className="dashboard-container__card2__table">
       <Table striped bordered hover size="sm">

@@ -62,8 +62,6 @@ export class Dashboard extends Component {
     );
     // eslint-disable-next-line no-unused-expressions
     response && response.data && (
-      // toast.dismiss(),
-      // toast.success('Login successful', { autoClose: 3500, hideProgressBar: false }),
       this.toggleState('isLoading', this.state.isLoading)
     )
   };
@@ -73,7 +71,7 @@ export class Dashboard extends Component {
     toast.info('working...', { autoClose: false, hideProgressBar: true })
     let response
     const { privatePostData, retrievedTrees } = this.props;
-    const { title, name, body} = this.state;
+    let { title, name, body} = this.state;
     const { type, id } = retrievedTrees.data;
     const parent = id;
 
@@ -92,6 +90,25 @@ export class Dashboard extends Component {
       response = await privatePostData('/createAnswer/', createTreeAction, 'post', data);
     }
 
+    if (buttonType === 'editIntent') {
+      if (name === '') { name = retrievedTrees.data.name};
+      if (body === '') { body = retrievedTrees.data.body};
+      const data = { id, updateFields: {name, body} };
+      response = await privatePostData('/updateIntent/', createTreeAction, 'patch', data);
+    }
+
+    if (buttonType === 'editTree') {
+      const data = { id, updateFields: {title} };
+      response = await privatePostData('/updateTree/', createTreeAction, 'patch', data);
+    }
+
+    if (buttonType === 'editAnswer') {
+      if (title === '') { title = retrievedTrees.data.title};
+      if (body === '') { body = retrievedTrees.data.body};
+      const data = { id, updateFields: {title, body} };
+      response = await privatePostData('/updateAnswer/', createTreeAction, 'patch', data);
+    }
+
     // eslint-disable-next-line no-unused-expressions
     response && response.error && (
       toast.dismiss(),
@@ -100,7 +117,7 @@ export class Dashboard extends Component {
     // eslint-disable-next-line no-unused-expressions
     response && response.data && (
       toast.dismiss(),
-      toast.success('Element Created Successfully', { autoClose: 3500, hideProgressBar: false }),
+      toast.success('Done', { autoClose: 3500, hideProgressBar: false }),
       this.handleClick(id, type)
     );
   }
