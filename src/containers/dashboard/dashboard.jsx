@@ -6,17 +6,17 @@ import 'react-toastify/dist/ReactToastify.css';
 import PropTypes from 'prop-types';
 import { privateDataFetch, privatePostData } from '../../redux/middlewares';
 import DashboardComponent from '../../components/dashboard';
-import { fetchTreesAction, openTreeAction } from '../../redux/actions/trees';
+import { fetchTreesAction, openTreeAction, createTreeAction } from '../../redux/actions/trees';
 
 
 export class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      account: '',
-      type: '',
-      amount: '',
-      isLoading: false
+      title: '',
+      name: '',
+      body: '',
+      isLoading: false,
     };
   }
 
@@ -43,7 +43,7 @@ export class Dashboard extends Component {
   handleClick = async (id, type) => {
     this.toggleState('isLoading', this.state.isLoading);
     let response;
-    const { history, privatePostData } = this.props;
+    const { privatePostData } = this.props;
     const data = { id, type };
     if (type === 'tree') {
       response = await privatePostData('/getTreeAndIntents/', openTreeAction, 'post', data);
@@ -57,33 +57,52 @@ export class Dashboard extends Component {
     // eslint-disable-next-line no-unused-expressions
     response && response.error && (
       toast.dismiss(),
-      toast.error(`${response.error.message}`, { autoClose: 3500, hideProgressBar: false }),
+      toast.error(`${response.error.message}`, { autoClose: 5000, hideProgressBar: false }),
       this.toggleState('isLoading', this.state.isLoading)
     );
     // eslint-disable-next-line no-unused-expressions
     response && response.data && (
-      toast.dismiss(),
-      toast.success('Login successful', { autoClose: 3500, hideProgressBar: false }),
+      // toast.dismiss(),
+      // toast.success('Login successful', { autoClose: 3500, hideProgressBar: false }),
       this.toggleState('isLoading', this.state.isLoading)
-      // history.push('/dashboard')
     )
   };
 
-  handleSubmit = async (event) => {
-    // event.preventDefault();
-    // const { privatePostData } = this.props;
-    // const { account, type, amount} = this.state;
-    // const data = { account, type, amount};
+  handleSubmit = async (event, buttonType) => {
+    event.preventDefault();
+    toast.info('working...', { autoClose: false, hideProgressBar: true })
+    let response
+    const { privatePostData, retrievedTrees } = this.props;
+    const { title, name, body} = this.state;
+    const { type, id } = retrievedTrees.data;
+    const parent = id;
 
-    // const response = await privatePostData('/transactions/', makeTransactionAction, 'post', data);
-    // // eslint-disable-next-line no-unused-expressions
-    // response && response.error && (
-    //   toast.error('Transaction failed, please try again', { autoClose: 3500, hideProgressBar: false })
-    // );
-    // // eslint-disable-next-line no-unused-expressions
-    // response && response.data && (
-    //   toast.success('Transaction Successful', { autoClose: 3500, hideProgressBar: false })
-    // );
+    if (buttonType === 'newIntent') {
+      const data = { name, body, parent};
+      response = await privatePostData('/createIntent/', createTreeAction, 'post', data);
+    }
+
+    if (buttonType === 'newTree') {
+      const data = { title, parent};
+      response = await privatePostData('/createTree/', createTreeAction, 'post', data);
+    }
+
+    if (buttonType === 'newAnswer') {
+      const data = { title, body, parent};
+      response = await privatePostData('/createAnswer/', createTreeAction, 'post', data);
+    }
+
+    // eslint-disable-next-line no-unused-expressions
+    response && response.error && (
+      toast.dismiss(),
+      toast.error(`Failed: ${response.error.message}`, { autoClose: 5000, hideProgressBar: false })
+    );
+    // eslint-disable-next-line no-unused-expressions
+    response && response.data && (
+      toast.dismiss(),
+      toast.success('Element Created Successfully', { autoClose: 3500, hideProgressBar: false }),
+      this.handleClick(id, type)
+    );
   }
 
   render() {
@@ -102,7 +121,13 @@ export class Dashboard extends Component {
   };
 };
 
-const matchDispatchToProps = (dispatch) => bindActionCreators({fetchTreesAction, privateDataFetch, openTreeAction, privatePostData}, dispatch);
+const matchDispatchToProps = (dispatch) => bindActionCreators({
+  fetchTreesAction,
+  privateDataFetch,
+  openTreeAction,
+  privatePostData,
+  createTreeAction,
+}, dispatch);
 
 const mapStateToProps = state => {
   return {
@@ -111,12 +136,12 @@ const mapStateToProps = state => {
 };
 
 Dashboard.propTypes = {
-  retrievedTrees: PropTypes.object,
+  retrievedTrees: PropTypes.object.isRequired,
   privateDataFetch: PropTypes.func,
   privatePostData: PropTypes.func,
   fetchTreesAction: PropTypes.func,
   openTreeAction: PropTypes.func,
-  // privatePostData: PropTypes.func.isRequired,
+  createTreeAction: PropTypes.func,
 };
 
 Dashboard.defaultProps = {

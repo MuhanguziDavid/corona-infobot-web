@@ -9,3 +9,8 @@ export const openTreeAction = (payload) => ({
   type: types.OPEN_TREE,
   payload
 });
+
+export const createTreeAction = (payload) => ({
+  type: types.CREATE_TREE,
+  payload
+});

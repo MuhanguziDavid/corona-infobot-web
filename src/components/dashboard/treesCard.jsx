@@ -1,21 +1,33 @@
 import React, { useState} from 'react';
+import PropTypes from 'prop-types';
 import { Button, Row, Col, Card, Spinner } from 'react-bootstrap';
 import TreesTable from './treesTable';
+import InputModal from './inputModal';
 
 const TreesCard = props => {
   const { handleChange, handleSubmit, handleClick, getTrees, retrievedTrees, isLoading } = props;
   let parentType;
-  if ((retrievedTrees && retrievedTrees.type === 'tree') || (retrievedTrees && retrievedTrees.type === 'answer')) {
+  if ((retrievedTrees.type === 'tree') || (retrievedTrees.type === 'answer')) {
     parentType = 'intent'
   } else {
     parentType = 'tree'
   }
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const [buttonType, setButtonType] = useState('');
+  const handleTree = () => setButtonType('newTree');
+  const handleIntent = () => setButtonType('newIntent');
+  const handleAnswer = () => setButtonType('newAnswer');
+
   console.log('retrievedTrees', retrievedTrees);
 
   return (
     <React.Fragment>
       <Card>
-        <Card.Header as="h3">{ (retrievedTrees && retrievedTrees.title) || (retrievedTrees && retrievedTrees.body) }</Card.Header>
+        <Card.Header as="h3">{ (retrievedTrees.title) || (retrievedTrees.body) }</Card.Header>
         <Card.Body>
           <Row>
             <Col>
@@ -42,10 +54,15 @@ const TreesCard = props => {
               )}
             </Col>
           </Row>
+
+
+          {/* Buttons */}
           <Row>
             {/* back buttons */}
             {/* intent, answer, and tree with a parent */}
-            {(retrievedTrees && retrievedTrees.type === "tree" && retrievedTrees.parent) || (retrievedTrees && retrievedTrees.type === "intent") || (retrievedTrees && retrievedTrees.type === "answer") ? (
+            {(retrievedTrees.type === "tree" && retrievedTrees.parent) ||
+            (retrievedTrees.type === "intent") ||
+            (retrievedTrees.type === "answer") ? (
               <Col>
                 <Button variant="dark btn-block" type="submit" onClick={() => handleClick(retrievedTrees.parent, parentType)}>
                   Back
@@ -53,7 +70,7 @@ const TreesCard = props => {
               </Col>
             ) : (
               // tree list 
-              retrievedTrees && retrievedTrees.type === "treeList" ?
+              retrievedTrees.type === "treeList" ?
                 null : (
                   // tree without parent
                   <Col>
@@ -64,33 +81,30 @@ const TreesCard = props => {
                 )
               )
             }
+
             {/* new and edit buttons */}
             {/* tree list */}
-            {retrievedTrees && retrievedTrees.type === "treeList" ? (
-              <Col>
-                <Button variant="dark btn-block" type="submit">
-                  New Tree
-                </Button>
-              </Col>
+            {retrievedTrees.type === "treeList" ? (
+              null
             ) : (
               // tree
-              retrievedTrees && retrievedTrees.type === 'tree' ? (
+              retrievedTrees.type === 'tree' ? (
                 <Col>
-                  <Button variant="dark btn-block" type="submit">
+                  <Button variant="dark btn-block" type="submit" onClick={() => {handleIntent(); handleShow();}}>
                     New Intent
                   </Button>
                 </Col>
               ) : (
                 // intent
-                retrievedTrees && retrievedTrees.type === 'intent' ? (
+                retrievedTrees.type === 'intent' ? (
                   <React.Fragment>
                     <Col>
-                      <Button variant="dark btn-block" type="submit">
+                      <Button variant="dark btn-block" type="submit" onClick={() => {handleTree(); handleShow();}}>
                         New Tree
                       </Button>
                     </Col>
                     <Col>
-                      <Button variant="dark btn-block" type="submit">
+                      <Button variant="dark btn-block" type="submit" onClick={() => {handleAnswer(); handleShow();}}>
                         New Answer
                       </Button>
                     </Col>
@@ -115,8 +129,30 @@ const TreesCard = props => {
           </Row>
         </Card.Body>
       </Card>
+
+
+      <InputModal
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        handleClose={handleClose}
+        handleShow={handleShow}
+        show={show}
+        retrievedTrees={retrievedTrees}
+        buttonType={buttonType}
+      />
     </React.Fragment>
   )
 }
+
+TreesCard.propTypes = {
+  retrievedTrees: PropTypes.object,
+};
+
+TreesCard.defaultProps = {
+  retrievedTrees: {
+    title: '',
+    type: ''
+  },
+};
 
 export default TreesCard;
