@@ -1,34 +1,14 @@
 import React from 'react';
-import { Button, Modal, Form } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
+import NewForm from './newForm';
+import EditForm from './editForm';
 
-const TransactionsModal = props => {
-  const {handleChange, handleSubmit, handleClose, handleShow, show, retrievedTrees, buttonType} = props;
+const InputModal = props => {
+  const {handleChange, handleSubmit, handleClose, show, retrievedTrees, buttonType} = props;
 
   const submitAndClose = (event) => {
     handleSubmit(event, buttonType);
     handleClose();
-  }
-
-  const handleIntent = (event) => {
-    return (
-      <Form>
-        {buttonType === 'newTree' ? (
-          <Form.Group controlId="title">
-            <Form.Control type="text" placeholder="title" name="title" onChange={handleChange}/>
-          </Form.Group>
-        ) : (
-          <React.Fragment>
-            <Form.Group controlId="title">
-              <Form.Control type="text" placeholder="title" name="title" onChange={handleChange}/>
-            </Form.Group>
-            <Form.Group controlId="body">
-              <Form.Control type="text" placeholder="body" name="body" onChange={handleChange}/>
-            </Form.Group>
-          </React.Fragment>
-        )}
-
-      </Form>
-    )
   }
 
   return (
@@ -37,17 +17,10 @@ const TransactionsModal = props => {
         <Modal.Title>{`Create child of ${retrievedTrees.type}`}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {retrievedTrees.type === 'intent' ? (
-          handleIntent()
+        {buttonType === 'newIntent' || buttonType === 'newTree' || buttonType === 'newAnswer' ? (
+          <NewForm handleChange={handleChange} retrievedTrees={retrievedTrees} buttonType={buttonType}/>
         ) : (
-          <Form>
-            <Form.Group controlId="name">
-              <Form.Control type="text" placeholder="name" name="name" onChange={handleChange}/>
-            </Form.Group>
-            <Form.Group controlId="body">
-              <Form.Control type="text" placeholder="body" name="body" onChange={handleChange}/>
-            </Form.Group>
-          </Form>
+          <EditForm handleChange={handleChange} retrievedTrees={retrievedTrees} buttonType={buttonType}/>
         )}
       </Modal.Body>
       <Modal.Footer>
@@ -62,4 +35,4 @@ const TransactionsModal = props => {
   )
 }
 
-export default TransactionsModal;
+export default InputModal;
