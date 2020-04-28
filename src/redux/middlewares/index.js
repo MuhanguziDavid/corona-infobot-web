@@ -62,9 +62,33 @@ const publicDataFetch = (endpoint, actionCreator) => (dispatch) => {
   });
 };
 
+const privateDeleteData = (path, actionCreator, id) => (dispatch) => {
+  const token = localStorage.getItem('token');
+
+  axiosInstance.defaults.headers.common.Authorization = 'Bearer '.concat(token);
+  return axiosInstance.delete(path, {
+    params: {
+      id: id
+    }
+  })
+  .then((response) => {
+    dispatch(actionCreator(true));
+    return {
+      data: response.data
+    };
+  }).catch((error) => {
+    dispatch(errorOccured(error));
+    console.log('error', error)
+    return {
+      error: error
+    };
+  });
+};
+
 export {
   publicPostData,
   privatePostData,
   privateDataFetch,
-  publicDataFetch
+  publicDataFetch,
+  privateDeleteData
 };

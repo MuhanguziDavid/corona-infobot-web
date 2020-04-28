@@ -14,3 +14,8 @@ export const createTreeAction = (payload) => ({
   type: types.CREATE_TREE,
   payload
 });
+
+export const deleteItemAction = (payload) => ({
+  type: types.DELETE_ITEM,
+  payload
+});

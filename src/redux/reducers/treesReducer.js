@@ -4,6 +4,7 @@ const initialState = {
   retrievedTrees: {},
   currentTree: {},
   createdTree: {},
+  deleteSuccessful: false,
   error: false,
 };
 
@@ -25,6 +26,11 @@ const treesReducer = (state = initialState, action) => {
         ...state,
         retrievedTrees: action.payload,
         createdTree: action.payload,
+      };
+    case types.DELETE_ITEM:
+      return {
+        ...state,
+        deleteSuccessful: action.payload,
       };
     case types.ERROR_OCCURRED:
       return {

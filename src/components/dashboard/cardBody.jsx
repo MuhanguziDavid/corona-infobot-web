@@ -71,44 +71,53 @@ const CardBody = props => {
             retrievedTrees.type === 'tree' ? (
               <React.Fragment>
                 <Col>
-                  <Button variant="dark btn-block" type="submit" onClick={() => {handleButtonType('newIntent'); handleShow();}}>
-                    New Intent
+                  <Button variant="dark btn-block" type="submit" onClick={() => {handleButtonType('editTree'); handleShow();}}>
+                    Edit tree
                   </Button>
                 </Col>
                 <Col>
-                  <Button variant="dark btn-block" type="submit" onClick={() => {handleButtonType('editTree'); handleShow();}}>
-                    Edit tree
+                  <Button variant="dark btn-block" type="submit" onClick={() => {handleButtonType('deleteTree'); handleShow();}}>
+                    Delete tree
+                  </Button>
+                </Col>
+                <Col>
+                  <Button variant="dark btn-block" type="submit" onClick={() => {handleButtonType('newIntent'); handleShow();}}>
+                    New Intent
                   </Button>
                 </Col>
               </React.Fragment>
             ) : (
               // intent
               retrievedTrees.type === 'intent' ? (
-                retrievedTrees.payloadData.length > 0 ? (
+                <React.Fragment>
                   <Col>
                     <Button variant="dark btn-block" type="submit" onClick={() => {handleButtonType('editIntent'); handleShow();}}>
                       Edit Intent
                     </Button>
                   </Col>
-                ) : (
-                  <React.Fragment>
-                    <Col>
-                      <Button variant="dark btn-block" type="submit" onClick={() => {handleButtonType('newTree'); handleShow();}}>
-                        New Tree
-                      </Button>
-                    </Col>
-                    <Col>
-                      <Button variant="dark btn-block" type="submit" onClick={() => {handleButtonType('newAnswer'); handleShow();}}>
-                        New Answer
-                      </Button>
-                    </Col>
-                    <Col>
-                      <Button variant="dark btn-block" type="submit" onClick={() => {handleButtonType('editIntent'); handleShow();}}>
-                        Edit Intent
-                      </Button>
-                    </Col>
-                  </React.Fragment>
-                )
+                  <Col>
+                    <Button variant="dark btn-block" type="submit" onClick={() => {handleButtonType('deleteIntent'); handleShow();}}>
+                      Delete Intent
+                    </Button>
+                  </Col>
+
+                  {retrievedTrees.payloadData.length > 0 ? (
+                    null
+                  ) : (
+                    <React.Fragment>
+                      <Col>
+                        <Button variant="dark btn-block" type="submit" onClick={() => {handleButtonType('newTree'); handleShow();}}>
+                          New Tree
+                        </Button>
+                      </Col>
+                      <Col>
+                        <Button variant="dark btn-block" type="submit" onClick={() => {handleButtonType('newAnswer'); handleShow();}}>
+                          New Answer
+                        </Button>
+                      </Col>
+                    </React.Fragment>
+                  )}
+                </React.Fragment>
               ) : (
                 // answer
                 <React.Fragment>
@@ -118,7 +127,7 @@ const CardBody = props => {
                     </Button>
                   </Col>
                   <Col>
-                    <Button variant="dark btn-block" type="submit" >
+                    <Button variant="dark btn-block" type="submit" onClick={() => {handleButtonType('deleteAnswer'); handleShow();}}>
                       Delete Answer
                     </Button>
                   </Col>
