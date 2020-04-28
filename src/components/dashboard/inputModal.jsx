@@ -20,7 +20,13 @@ const InputModal = props => {
         {buttonType === 'newIntent' || buttonType === 'newTree' || buttonType === 'newAnswer' ? (
           <NewForm handleChange={handleChange} retrievedTrees={retrievedTrees} buttonType={buttonType}/>
         ) : (
-          <EditForm handleChange={handleChange} retrievedTrees={retrievedTrees} buttonType={buttonType}/>
+          buttonType === 'editIntent' || buttonType === 'editTree' || buttonType === 'editAnswer' ? (
+            <EditForm handleChange={handleChange} retrievedTrees={retrievedTrees} buttonType={buttonType}/>
+          ) : (
+            <React.Fragment>
+              Are you sure you want to delete this item and it's children?
+            </React.Fragment>
+          )
         )}
       </Modal.Body>
       <Modal.Footer>
@@ -28,7 +34,7 @@ const InputModal = props => {
           Close
         </Button>
         <Button variant="primary" onClick={submitAndClose}>
-          Save Changes
+          Submit
         </Button>
       </Modal.Footer>
     </Modal>

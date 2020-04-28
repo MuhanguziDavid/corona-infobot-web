@@ -4,9 +4,9 @@ import { bindActionCreators } from 'redux';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PropTypes from 'prop-types';
-import { privateDataFetch, privatePostData } from '../../redux/middlewares';
+import { privateDataFetch, privatePostData, privateDeleteData } from '../../redux/middlewares';
 import DashboardComponent from '../../components/dashboard';
-import { fetchTreesAction, openTreeAction, createTreeAction } from '../../redux/actions/trees';
+import { fetchTreesAction, openTreeAction, createTreeAction, deleteItemAction } from '../../redux/actions/trees';
 
 
 export class Dashboard extends Component {
@@ -56,7 +56,7 @@ export class Dashboard extends Component {
     }
     // eslint-disable-next-line no-unused-expressions
     response && response.error && (
-      toast.dismiss(),
+      // toast.dismiss(),
       toast.error(`${response.error.message}`, { autoClose: 5000, hideProgressBar: false }),
       this.toggleState('isLoading', this.state.isLoading)
     );
@@ -65,6 +65,36 @@ export class Dashboard extends Component {
       this.toggleState('isLoading', this.state.isLoading)
     )
   };
+
+  handleDelete = async (buttonType) => {
+    let response;
+    const { privateDeleteData, retrievedTrees } = this.props;
+    let { type, id, parent } = retrievedTrees.data;
+    if (buttonType === 'deleteIntent') {
+      type = 'tree'
+      response = await privateDeleteData('/deleteIntent', deleteItemAction, id);
+    }
+    if (buttonType === 'deleteTree') {
+      type = 'intent'
+      response = await privateDeleteData('/deleteTree', deleteItemAction, id);
+    }
+    if (buttonType === 'deleteAnswer') {
+      type = 'intent'
+      response = await privateDeleteData('/deleteAnswer', deleteItemAction, id);
+    }
+
+    // eslint-disable-next-line no-unused-expressions
+    response && response.error && (
+      toast.dismiss(),
+      toast.error(`Failed: ${response.error.message}`, { autoClose: 5000, hideProgressBar: false })
+    );
+    // eslint-disable-next-line no-unused-expressions
+    response && response.data && (
+      toast.dismiss(),
+      toast.success('Deleted Successfully', { autoClose: 3500, hideProgressBar: false }),
+      this.handleClick(parent, type)
+    );
+  }
 
   handleSubmit = async (event, buttonType) => {
     event.preventDefault();
@@ -109,6 +139,10 @@ export class Dashboard extends Component {
       response = await privatePostData('/updateAnswer/', createTreeAction, 'patch', data);
     }
 
+    if (buttonType === 'deleteIntent' || buttonType === 'deleteTree' || buttonType === 'deleteAnswer') {
+      return this.handleDelete(buttonType);
+    }
+
     // eslint-disable-next-line no-unused-expressions
     response && response.error && (
       toast.dismiss(),
@@ -144,6 +178,8 @@ const matchDispatchToProps = (dispatch) => bindActionCreators({
   openTreeAction,
   privatePostData,
   createTreeAction,
+  privateDeleteData,
+  deleteItemAction,
 }, dispatch);
 
 const mapStateToProps = state => {
@@ -159,6 +195,8 @@ Dashboard.propTypes = {
   fetchTreesAction: PropTypes.func,
   openTreeAction: PropTypes.func,
   createTreeAction: PropTypes.func,
+  privateDeleteData: PropTypes.func,
+  deleteItemAction: PropTypes.func,
 };
 
 Dashboard.defaultProps = {

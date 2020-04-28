@@ -4,6 +4,7 @@ const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS';
 const FETCH_TREES = 'FETCH_TREES';
 const OPEN_TREE = 'OPEN_TREE';
 const CREATE_TREE = 'CREATE_TREE';
+const DELETE_ITEM = 'DELETE_ITEM';
 
 export {
   LOGIN_USER,
@@ -12,4 +13,5 @@ export {
   FETCH_TREES,
   OPEN_TREE,
   CREATE_TREE,
+  DELETE_ITEM,
 };
