@@ -21,11 +21,24 @@ export class Dashboard extends Component {
   }
 
   componentDidMount () {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return this.logUserIn();
+    }
     this.getTrees();
   }
 
   toggleState = (name, value) => {
     this.setState({ [name]: !value });
+  }
+
+  logUserIn = () => {
+    const { history } = this.props;
+    return (
+      toast.dismiss(),
+      toast.error(`Please login`, { autoClose: 5000, hideProgressBar: false }),
+      history.push('/login')
+    )
   }
 
   getTrees = async () => {
@@ -45,6 +58,10 @@ export class Dashboard extends Component {
     let response;
     const { privatePostData } = this.props;
     const data = { id, type };
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return this.logUserIn();
+    }
     if (type === 'tree') {
       response = await privatePostData('/getTreeAndIntents/', openTreeAction, 'post', data);
     }

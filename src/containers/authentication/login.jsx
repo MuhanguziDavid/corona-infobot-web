@@ -44,7 +44,6 @@ export class Login extends Component {
     response && response.data && (
       toast.dismiss(),
       localStorage.setItem('token', response.data.user.token),
-      localStorage.setItem('username', response.data.user.firstname),
       toast.success('Login successful', { autoClose: 3500, hideProgressBar: false }),
       this.toggleState('isLoading', this.state.isLoading),
       history.push('/dashboard')

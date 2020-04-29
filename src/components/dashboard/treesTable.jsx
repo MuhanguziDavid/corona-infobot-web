@@ -11,15 +11,13 @@ const TreesTable = props => {
           <React.Fragment>
             <thead>
               <tr>
-                <th>id</th>
                 <th>tree</th>
               </tr>
             </thead>
             <tbody>
               {retrievedTrees.payloadData.map((tree, index) => (
                 <React.Fragment key={index}>
-                  <tr onClick={() => handleClick(tree.id, tree.type)}>
-                    <td>{tree.id}</td>
+                  <tr className="dashboard-container__card2__table__clickable-row" onClick={() => handleClick(tree.id, tree.type)}>
                     <td>{tree.title}</td>
                   </tr>
                 </React.Fragment>
@@ -41,7 +39,7 @@ const TreesTable = props => {
               <tbody>
                 {retrievedTrees.payloadData.map((tree, index) => (
                   <React.Fragment key={index}>
-                    <tr onClick={() => handleClick(tree.id, tree.type)}>
+                    <tr className="dashboard-container__card2__table__clickable-row" onClick={() => handleClick(tree.id, tree.type)}>
                       <td>{tree.number ? tree.number : 'N/A'}</td>
                       <td>{tree.type}</td>
                       <td>{tree.name}</td>
@@ -65,7 +63,7 @@ const TreesTable = props => {
                 <tbody>
                   {retrievedTrees.payloadData.map((tree, index) => (
                     <React.Fragment key={index}>
-                      <tr onClick={() => handleClick(tree.id, tree.type)}>
+                      <tr className="dashboard-container__card2__table__clickable-row" onClick={() => handleClick(tree.id, tree.type)}>
                         <td>{tree.number ? tree.number : 'N/A'}</td>
                         <td>{tree.type}</td>
                         <td>{tree.title}</td>
