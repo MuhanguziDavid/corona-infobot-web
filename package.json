@@ -2,6 +2,10 @@
   "name": "corona-infobot-web",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "npm": "6.13.7",
+    "node": "13.11.0"
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -14,7 +18,7 @@
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.1",
+    "react-scripts": "3.2.0",
     "react-toastify": "^5.5.0",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
