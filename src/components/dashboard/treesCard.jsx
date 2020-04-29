@@ -20,8 +20,6 @@ const TreesCard = props => {
   const [buttonType, setButtonType] = useState('');
   const handleButtonType = (value) => setButtonType(value);
 
-  console.log('retrievedTrees', retrievedTrees);
-
   return (
     <React.Fragment>
       <Card>

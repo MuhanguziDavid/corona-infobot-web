@@ -12,6 +12,10 @@
     &__table {
       max-height: 400px;
       overflow: scroll;
+
+      &__clickable-row:hover {
+        cursor: pointer;
+      }
     }
   }
 }
